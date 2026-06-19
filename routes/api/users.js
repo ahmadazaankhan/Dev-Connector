@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const gravatar = require('gravatar');
+const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
 
 const User = require('../../models/User');
@@ -39,7 +40,17 @@ async (req, res) => {
         d: 'mm'
       })
       //get users gravatar
-      
+      user = new User({
+        name,
+        email,
+        password,
+      });
+
+      const salt = await bcrypt.genSalt(10);
+
+      user.password = await bcrypt.hash(password, salt);
+
+      await user.save();
       //encrypt password
       
       //return jsonwebtoken
