@@ -68,7 +68,8 @@ async (req, res) => {
         (err, token) => {
         if (err) throw err;
         res.json({ token });
-      });
+      }
+    );
 
     } catch (err) {
       console.error(err.message);
