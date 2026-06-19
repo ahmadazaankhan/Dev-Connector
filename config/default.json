@@ -1,4 +1,5 @@
 {
-    "mongoURI": "mongodb://root:zewstmongo@49.12.211.59:27017/azaan-learning?directConnection=true&authSource=admin"
+    "mongoURI": "mongodb://root:zewstmongo@49.12.211.59:27017/azaan-learning?directConnection=true&authSource=admin",
+    "jwtSecret": "mysecrettoken"
 }
 
