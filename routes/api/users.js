@@ -55,7 +55,7 @@ async (req, res) => {
       
       //return jsonwebtoken
       
-      res.send('User route');
+      res.send('User registered');
 
     } catch (err) {
       console.error(err.message);
