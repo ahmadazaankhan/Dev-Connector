@@ -67,7 +67,6 @@ router.post('/',
     if(status) profileFields.status = status;
     if(githubusername) profileFields.githubusername = githubusername;
     if (skills) {
-      console.log(123);
       profileFields.skills = skills.split(',').map(skill => skill.trim());
     }
 
@@ -80,7 +79,24 @@ router.post('/',
     if(instagram) profileFields.social.instagram = instagram;
 
     try {
+      let profile = await Profile.findOne({ user: req.user.id});
 
+      if(profile) {
+        profile = await Profile.findOneAndUpdate(
+          { user: req.user.id}, 
+          { $set: profileFields }, 
+          { returnDocument: 'after' }
+        );
+
+        return res.json(profile);
+      }
+
+      // Create
+
+      profile = new Profile(profileFields);
+
+      await profile.save();
+      res.json(profile);
     } catch(err) {
       console.error(err.message);
       res.status(500).send('Server Error');
