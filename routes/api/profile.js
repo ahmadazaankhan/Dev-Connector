@@ -65,13 +65,26 @@ router.post('/',
     if(location) profileFields.location = location;
     if(bio) profileFields.bio = bio;
     if(status) profileFields.status = status;
-    if(youtube) profileFields.youtube = youtube;
-    if(facebook) profileFields.facebook = facebook;
     if(githubusername) profileFields.githubusername = githubusername;
-    if(twitter) profileFields.twitter = twitter;
-    if(instagram) profileFields.instagram = instagram;
-    if(linkedin) profileFields.linkedin = linkedin;
+    if (skills) {
+      console.log(123);
+      profileFields.skills = skills.split(',').map(skill => skill.trim());
+    }
 
+    // Build Social 
+    profileFields.social = {};
+    if(youtube) profileFields.social.youtube = youtube;
+    if(twitter) profileFields.social.twitter = twitter;
+    if(facebook) profileFields.social.facebook = facebook;
+    if(linkedin) profileFields.social.linkedin = linkedin;
+    if(instagram) profileFields.social.instagram = instagram;
+
+    try {
+
+    } catch(err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
   }
 );
 
