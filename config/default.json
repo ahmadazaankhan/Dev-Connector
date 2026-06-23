@@ -1,5 +1,9 @@
 {
     "mongoURI": "mongodb://root:zewstmongo@49.12.211.59:27017/azaan-learning?directConnection=true&authSource=admin",
-    "jwtSecret": "mysecrettoken"
+    "jwtSecret": "mysecrettoken",
+    "githubClientId": "Ov23liA6mtd9Ho8sE5F5",
+    "githubSecret": "57e880da1ee5588549e8940052c64b46ce1b22cf",
+    "githubToken": "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"
+
 }
 
