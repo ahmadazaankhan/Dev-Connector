@@ -14,7 +14,7 @@
     "react-dom": "^19.2.7",
     "react-moment": "^2.0.2",
     "react-redux": "^9.3.0",
-    "react-router-dom": "^7.18.0",
+    "react-router-dom": "^6.30.4",
     "react-scripts": "5.0.1",
     "redux": "^5.0.1",
     "redux-thunk": "^3.1.0",
@@ -43,5 +43,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:5000"
 }
