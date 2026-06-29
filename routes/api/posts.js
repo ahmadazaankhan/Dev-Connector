@@ -4,47 +4,46 @@ const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
 const Post = require('../../models/Post');
-const Profile = require('../../models/Profile');
-const User = require('../../models/User'); 
-// @route   GET api/posts
-// @desc    Test route
-// @access  Public
+const User = require('../../models/User');
+
+// @route   POST api/posts
+// @desc    Create a post
+// @access  Private
 router.post(
-  '/', 
-  [ 
-    auth, 
+  '/',
+  [
+    auth,
     [
       check('text', 'Text is required')
         .not()
         .isEmpty()
-    ] 
-  ] , 
+    ]
+  ],
   async (req, res) => {
     const errors = validationResult(req);
-    if(!errors.isEmpty()) {
+    if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
     try {
-      
       const user = await User.findById(req.user.id).select('-password');
+      if (!user) {
+        return res.status(404).json({ msg: 'User not found' });
+      }
 
-      const newPost = {
+      const post = new Post({
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
         user: req.user.id
-      }
+      });
 
-      const post = await newPost.save();
-      
-      res.json(post);
+      await post.save();
+      res.status(201).json(post);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
-
-
   }
 );
 
