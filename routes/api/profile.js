@@ -9,36 +9,43 @@ const User = require('../../models/User');
 const Profile = require('../../models/Profile');
 
 
-router.get('/', auth, async (req, res) => {
+// @route   GET api/profile/me
+// @desc    Get current users profile
+// @access  Private
+router.get('/me', auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id }).populate('user', ['name', 'avatar']);
+    const profile = await Profile.findOne({ user: req.user.id }).populate(
+      'user',
+      ['name', 'avatar']
+    );
 
-    if(!profile) {
+    if (!profile) {
       return res.status(400).json({ msg: 'There is no profile for this user' });
-
     }
 
-  } catch(err) {
+    res.json(profile);
+  } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
 
-// @route   GET api/Profile/me
-// @desc    create or update user profile 
+// @route   POST api/profile
+// @desc    Create or update user profile
 // @access  Private
-router.post('/', 
-  [ 
-    auth, 
+router.post(
+  '/',
+  [
+    auth,
     [
       check('status', 'Status is required')
         .not()
-        .isEmpty(), 
+        .isEmpty(),
       check('skills', 'Skills is required')
         .not()
         .isEmpty()
-    ] 
-  ], 
+    ]
+  ],
   async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
@@ -106,6 +113,9 @@ router.post('/',
   }
 );
 
+// @route   GET api/profile
+// @desc    Get all profiles
+// @access  Public
 router.get('/', async (req, res) => {
   try {
     const profiles = await Profile.find(). populate('user', ['name', 'avatar']);
@@ -348,7 +358,7 @@ router.get('/github/:username', (req, res) => {
       if(error) console.error(error);
 
       if(response.statusCode !== 200) {
-        res.status(404).json({ msg: 'No Github profile found' });
+        return res.status(404).json({ msg: 'No Github profile found' });
       }
 
       res.json(JSON.parse(body));
@@ -361,5 +371,28 @@ router.get('/github/:username', (req, res) => {
 });
 
 
+// @route   GET api/profile/:profile_id
+// @desc    Get profile by id
+// @access  Public
+router.get('/:profile_id', async (req, res) => {
+  try {
+    const profile = await Profile.findById(req.params.profile_id).populate(
+      'user',
+      ['name', 'avatar']
+    );
+
+    if (!profile) {
+      return res.status(400).json({ msg: 'Profile not found' });
+    }
+
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === 'ObjectId') {
+      return res.status(400).json({ msg: 'Profile not found' });
+    }
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;

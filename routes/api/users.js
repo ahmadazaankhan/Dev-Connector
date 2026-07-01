@@ -45,6 +45,7 @@ async (req, res) => {
       user = new User({
         name,
         email,
+        avatar,
         password,
       });
 
